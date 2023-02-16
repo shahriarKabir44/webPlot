@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .flex {
+        display: grid;
+        grid-template-columns: 50% 50%;
+    }
+</style>
+
+<body>
+    <div class="flex">
+        <canvas id="myCanvas" width="500" height="500" style="border: 1px solid;padding: 0;"></canvas>
+        <div>
+            <button id="clear">clear</button>
+
+
+            <button id="plotLine">Draw line</button>
+
+            <div id="lineInputs" style="display: none;">
+                <div class="flex">
+                    <input type="text" name="" placeholder="x1" id="p1x1">
+                    <input type="text" name="" placeholder="y1" id="p1y1">
+                </div>
+                <div class="flex">
+                    <input type="text" name="" placeholder="x1" id="p1x2">
+                    <input type="text" name="" placeholder="y1" id="p1y2">
+
+                </div>
+                <button id="plotLineBtn">Plot</button>
+            </div>
+
+
+
+
+            <button id="plotCircle">Draw circle</button>
+
+            <div id="curcleInputs" style="display: none;">
+                <div class="flex">
+                    <input type="text" name="" placeholder="center x" id="centerX">
+                    <input type="text" name="" placeholder="center y" id="centerY">
+
+                </div>
+                <div class="flex">
+                    <input type="text" name="" placeholder="circle radius" id="circleRad">
+
+                </div>
+                <button id="plotCircleBtn">Plot</button>
+            </div>
+
+
+
+        </div>
+    </div>
+</body>
+<script type="module" src="./app.js"></script>
+<script type="module" src="./utils/plotScale.js"></script>
+<script src="./renderers/plotLine.js" type="module"></script>
+<script type="module" src="./renderers/plotCircle.js"></script>
+
+</html>
