@@ -1,7 +1,7 @@
 import plotScale from './utils/plotScale.js'
 import { select, clearCanvas } from "./utils/index.js";
-import PlotLine from "./renderers/plotLine.js";
-import PlotCircle from './renderers/plotCircle.js'
+import Line from "./renderers/Line.js";
+import Circle from './renderers/Circle.js'
 
 
 
@@ -46,14 +46,14 @@ select('plotCircle').onclick = () => {
 
 select('plotCircleBtn').onclick = () => {
     console.log('here')
-    PlotCircle.drawCircleBresenham([
+    Circle.drawCircleBresenham([
         select('centerX').value * 1,
         select('centerY').value * 1
     ], select('circleRad').value)
 }
 select('plotLineBtn').onclick = () => {
     //  console.log(start, end  )
-    PlotLine.plotLineBresenham([
+    Line.plotLineBresenham([
         select('p1x1').value * 1,
         select('p1y1').value * 1
     ], [

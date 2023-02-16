@@ -1,11 +1,10 @@
 import { putPixel } from "../utils/index.js";
 
-export default class PlotLine {
+export default class Line {
     static plotLineDDL(start, end) {
         if (start[0] > end[0]) {
             [start, end] = [end, start]
         }
-        console.log(start, end)
         let slope = (end[1] - start[1]) / (end[0] - start[0])
         if (Math.abs(slope) <= 1) {
             console.log(slope)

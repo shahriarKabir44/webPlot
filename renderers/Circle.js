@@ -1,5 +1,5 @@
 import { putPixel } from "../utils/index.js";
-export default class PlotCircle {
+export default class Circle {
     static _putPixels(center, x, y) {
         let dirs = [-1, 1]
         for (let n of dirs) {
@@ -15,7 +15,7 @@ export default class PlotCircle {
         let d = 2 * (x + 1) ** 2 + y ** 2 + (y - 1) ** 2 - 2 * r * r
 
         while (x <= y) {
-            PlotCircle._putPixels(center, x, y)
+            Circle._putPixels(center, x, y)
             if (d < 0)
                 d += (4 * x + 6)
             else {
