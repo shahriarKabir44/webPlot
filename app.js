@@ -2,14 +2,15 @@ import plotScale from './utils/plotScale.js'
 import { select, clearCanvas } from "./utils/index.js";
 import Line from "./renderers/Line.js";
 import Circle from './renderers/Circle.js'
-
-
+import Ellipse from './renderers/Ellipse.js';
 
 let plotType = null;
 let start = null
 let end = null
 const { height, width } = select('myCanvas').getBoundingClientRect()
 plotScale(height, width)
+
+
 select('plotLine').onclick = () => {
     if (plotType == null) {
         plotType = 'line'
