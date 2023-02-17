@@ -9,62 +9,42 @@ let start = null
 let end = null
 const { height, width } = select('myCanvas').getBoundingClientRect()
 plotScale(height, width)
-
+function hideAll() {
+    document.querySelectorAll('.plotter').forEach(el => {
+        el.style.display = 'none'
+    })
+}
 select('plotEllipse').onclick = () => {
-    if (plotType == null) {
-        plotType = 'ellipse'
-        select('ellipseInputs').style.display = 'block'
-
-    }
-    else {
-        plotType = null
-        select('ellipseInputs').style.display = 'none'
-    }
+    hideAll()
+    plotType = 'ellipse'
+    select('ellipseInputs').style.display = 'block'
 }
 
 select('plotLine').onclick = () => {
-    if (plotType == null) {
-        plotType = 'line'
-        select('lineInputs').style.display = 'block'
+    hideAll()
+    plotType = 'line'
+    select('lineInputs').style.display = 'block'
 
-    }
-    else {
-        plotType = null
-        start = null
-        end = null
-        select('p1x1').value = null
-        select('p1y1').value = null
-        select('p1x2').value = null
-        select('p1y2').value = null
-        select('lineInputs').style.display = 'none'
 
-    }
 }
-select('myCanvas').addEventListener('click', (e) => {
-    mainHandler(e, plotType)
-})
+
 select('plotCircle').onclick = () => {
 
-    if (plotType == null) {
-        plotType = 'circle'
-        select('curcleInputs').style.display = 'block'
-    }
-    else {
-        plotType = null
-        select('curcleInputs').style.display = 'none'
-    }
+    hideAll()
+
+    plotType = 'circle'
+    select('curcleInputs').style.display = 'block'
+
 }
 
 
 select('plotCircleBtn').onclick = () => {
-    console.log('here')
     Circle.drawCircleBresenham([
         select('centerX').value * 1,
         select('centerY').value * 1
     ], select('circleRad').value)
 }
 select('plotLineBtn').onclick = () => {
-    //  console.log(start, end  )
     Line.plotLineBresenham([
         select('p1x1').value * 1,
         select('p1y1').value * 1
@@ -93,13 +73,14 @@ select('clear').onclick =
         plotScale(height, width)
     }
 
-
+select('myCanvas').addEventListener('click', (e) => {
+    mainHandler(e, plotType)
+})
 function mainHandler(e, eventType) {
     let point = [e.clientX - select('myCanvas').getBoundingClientRect().x,
     e.clientY - select('myCanvas').getBoundingClientRect().y]
     if (eventType == 'line') {
 
-        console.log(point, start, end)
         if (start == null) {
             start = point
             select('p1x1').value = point[0]
@@ -116,7 +97,7 @@ function mainHandler(e, eventType) {
         select('centerY').value = point[1]
     }
     else if (eventType == 'ellipse') {
-        select('centerX').value = point[0]
-        select('centerY').value = point[1]
+        select('centerXEl').value = point[0]
+        select('centerYEl').value = point[1]
     }
 }

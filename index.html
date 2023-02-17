@@ -12,6 +12,10 @@
         display: grid;
         grid-template-columns: 50% 50%;
     }
+
+    .plotter {
+        display: none;
+    }
 </style>
 
 <body>
@@ -22,8 +26,11 @@
 
 
             <button id="plotLine">Draw line</button>
+            <button id="plotCircle">Draw circle</button>
+            <button id="plotEllipse">Draw ellipse</button>
+            <div class="plotter" id="lineInputs" style="display: none;">
+                <h3>Plot line</h3>
 
-            <div id="lineInputs" style="display: none;">
                 <div class="flex">
                     <input type="text" name="" placeholder="x1" id="p1x1">
                     <input type="text" name="" placeholder="y1" id="p1y1">
@@ -39,12 +46,12 @@
 
 
 
-            <button id="plotCircle">Draw circle</button>
-            <button id="plotEllipse">Draw ellipse</button>
-            <div id="ellipseInputs" style="display: none;">
+
+            <div class="plotter" id="ellipseInputs" style="display: none;">
+                <h3>Plot ellipse</h3>
                 <div class="flex">
-                    <input type="text" name="" placeholder="center x" id="centerX">
-                    <input type="text" name="" placeholder="center y" id="centerY">
+                    <input type="text" name="" placeholder="center x" id="centerXEl">
+                    <input type="text" name="" placeholder="center y" id="centerYEl">
 
                 </div>
                 <div class="flex">
@@ -54,7 +61,9 @@
                 </div>
                 <button id="plotEllipseBtn">Plot</button>
             </div>
-            <div id="curcleInputs" style="display: none;">
+            <div class="plotter" id="curcleInputs" style="display: none;">
+                <h3>Plot circle</h3>
+
                 <div class="flex">
                     <input type="text" name="" placeholder="center x" id="centerX">
                     <input type="text" name="" placeholder="center y" id="centerY">
