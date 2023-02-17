@@ -10,6 +10,17 @@ let end = null
 const { height, width } = select('myCanvas').getBoundingClientRect()
 plotScale(height, width)
 
+select('plotEllipse').onclick = () => {
+    if (plotType == null) {
+        plotType = 'ellipse'
+        select('ellipseInputs').style.display = 'block'
+
+    }
+    else {
+        plotType = null
+        select('ellipseInputs').style.display = 'none'
+    }
+}
 
 select('plotLine').onclick = () => {
     if (plotType == null) {
@@ -62,7 +73,12 @@ select('plotLineBtn').onclick = () => {
         select('p1y2').value * 1
     ])
 }
-
+select('plotEllipseBtn').onclick = () => {
+    Ellipse.midpointPlot([
+        select('centerX').value * 1,
+        select('centerY').value * 1
+    ], select('ellipseA').value * 1, select('ellipseB').value * 1)
+}
 
 
 select('clear').onclick =
@@ -79,9 +95,10 @@ select('clear').onclick =
 
 
 function mainHandler(e, eventType) {
+    let point = [e.clientX - select('myCanvas').getBoundingClientRect().x,
+    e.clientY - select('myCanvas').getBoundingClientRect().y]
     if (eventType == 'line') {
-        let point = [e.clientX - select('myCanvas').getBoundingClientRect().x,
-        e.clientY - select('myCanvas').getBoundingClientRect().y]
+
         console.log(point, start, end)
         if (start == null) {
             start = point
@@ -92,15 +109,13 @@ function mainHandler(e, eventType) {
             end = point
             select('p1x2').value = point[0]
             select('p1y2').value = point[1]
-
-
         }
     }
     else if (eventType == 'circle') {
-        let point = [e.clientX - select('myCanvas').getBoundingClientRect().x,
-        e.clientY - select('myCanvas').getBoundingClientRect().y]
-        console.log(point)
-
+        select('centerX').value = point[0]
+        select('centerY').value = point[1]
+    }
+    else if (eventType == 'ellipse') {
         select('centerX').value = point[0]
         select('centerY').value = point[1]
     }
