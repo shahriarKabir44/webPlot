@@ -14,6 +14,7 @@ function hideAll() {
         el.style.display = 'none'
     })
 }
+
 select('plotEllipse').onclick = () => {
     hideAll()
     plotType = 'ellipse'
@@ -23,9 +24,9 @@ select('plotEllipse').onclick = () => {
 select('plotLine').onclick = () => {
     hideAll()
     plotType = 'line'
+    start = null
+    end = null
     select('lineInputs').style.display = 'block'
-
-
 }
 
 select('plotCircle').onclick = () => {
