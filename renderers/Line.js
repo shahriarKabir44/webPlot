@@ -5,9 +5,8 @@ export default class Line {
         if (start[0] > end[0]) {
             [start, end] = [end, start]
         }
-        let slope = (end[1] - start[1]) / (end[0] - start[0])
+        let slope = (end[1] - start[1]) / (end[0] - start[0] + 1e-5)
         if (Math.abs(slope) <= 1) {
-            console.log(slope)
             let y = start[1]
             for (let n = start[0]; n <= end[0]; n++) {
                 putPixel(n, parseInt(y))
@@ -35,7 +34,7 @@ export default class Line {
         let d = 2 * dy - dx
         let dt = 2 * (dy - dx)
         let ds = 2 * dy
-        let slope = dy / dx
+        let slope = dy / (dx + 1e-5)
 
         if (slope <= 1) {
             let y = start[1]

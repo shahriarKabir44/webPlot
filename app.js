@@ -14,7 +14,7 @@ function hideAll() {
         el.style.display = 'none'
     })
 }
-
+console.log(select('myCanvas').getBoundingClientRect())
 select('plotEllipse').onclick = () => {
     hideAll()
     plotType = 'ellipse'
@@ -77,9 +77,10 @@ select('clear').onclick =
 select('myCanvas').addEventListener('click', (e) => {
     mainHandler(e, plotType)
 })
+
 function mainHandler(e, eventType) {
-    let point = [e.clientX - select('myCanvas').getBoundingClientRect().x,
-    e.clientY - select('myCanvas').getBoundingClientRect().y]
+    let point = [e.clientX - select('myCanvas').getBoundingClientRect().x, 500 -
+        e.clientY - select('myCanvas').getBoundingClientRect().y]
     if (eventType == 'line') {
 
         if (start == null) {
