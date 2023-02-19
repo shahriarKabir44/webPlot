@@ -18,7 +18,6 @@ export default class Ellipse extends Shape {
         }
     }
     render() {
-        console.log(this.center)
         this.points.forEach(([x, y]) => {
 
             Ellipse._putPixel(this.center, x, y)

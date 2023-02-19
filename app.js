@@ -22,6 +22,9 @@ select('confirmSelection').onclick = () => {
         case 'ellipse':
             newShape = new Ellipse()
             break;
+        case 'line':
+            newShape = new Line()
+            break
     }
     Shape.lastShape = newShape;
     console.log(Shape.state)
@@ -48,17 +51,19 @@ select('myCanvas').addEventListener('click', (e) => {
 function mainHandler(e) {
     let point = [e.clientX - select('myCanvas').getBoundingClientRect().x, 500 -
         e.clientY - select('myCanvas').getBoundingClientRect().y]
+    if (Shape.lastShape == null) return
     if (Shape.lastShape.type == 'line') {
 
-        if (start == null) {
-            start = point
-            select('p1x1').value = point[0]
-            select('p1y1').value = point[1]
+        if (Shape.lastShape.start == null) {
+
+            select('x1' + Shape.lastShape.id).value = point[0]
+            select('y1' + Shape.lastShape.id).value = point[1]
+            Shape.lastShape.start = point
         }
-        else if (end == null) {
-            end = point
-            select('p1x2').value = point[0]
-            select('p1y2').value = point[1]
+        else if (Shape.lastShape.end == null) {
+            Shape.lastShape.end = point
+            select('x2' + Shape.lastShape.id).value = point[0]
+            select('y2' + Shape.lastShape.id).value = point[1]
         }
     }
     else if (Shape.lastShape.type == 'circle') {

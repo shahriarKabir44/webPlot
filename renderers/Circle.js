@@ -52,9 +52,10 @@ export default class Circle extends Shape {
         this.drawCircleBresenham(radius)
         this.render()
         select(`curcleInputs${this.id}`).innerHTML = ` <h3>Circle</h3>
-            <button class="deleteShapeBtn" id="delete-${this.id}" >delete</button>
+            
             radius=${radius}
             center=(${center[0]},${center[1]})
+            <button class="deleteShapeBtn" id="delete-${this.id}" >delete</button>
         `
     }
     removeHTML() {
