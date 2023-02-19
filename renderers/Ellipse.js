@@ -54,6 +54,8 @@ export default class Ellipse extends Shape {
             a=${a}
             b=${b}
             center=(${center[0]},${center[1]})
+            <button class="deleteShapeBtn" id="delete-${this.id}" >delete</button>
+
         `
     }
     midpointPlot(center, a, b) {

@@ -7,6 +7,7 @@ export default class Circle extends Shape {
         this.radius = []
         this.center = 0
         this.points = []
+        this.type = 'circle'
     }
     static _putPixels(center, x, y) {
 
@@ -50,8 +51,8 @@ export default class Circle extends Shape {
         this.drawCircleBresenham(center, radius)
         this.render()
         select(`curcleInputs${this.id}`).innerHTML = ` <h3>Circle</h3>
+            <button class="deleteShapeBtn" id="delete-${this.id}" >delete</button>
             radius=${radius}
-            
             center=(${center[0]},${center[1]})
         `
     }
