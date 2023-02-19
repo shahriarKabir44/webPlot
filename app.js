@@ -3,7 +3,7 @@ import { select, clearCanvas } from "./utils/index.js";
 import Line from "./renderers/Line.js";
 import Circle from './renderers/Circle.js'
 import Ellipse from './renderers/Ellipse.js';
-
+let states = []
 let plotType = null;
 let start = null
 let end = null
@@ -15,6 +15,8 @@ function hideAll() {
     })
 }
 console.log(select('myCanvas').getBoundingClientRect())
+let elipse = null;
+let circle = null
 select('plotEllipse').onclick = () => {
     hideAll()
     plotType = 'ellipse'
@@ -30,9 +32,7 @@ select('plotLine').onclick = () => {
 }
 
 select('plotCircle').onclick = () => {
-
     hideAll()
-
     plotType = 'circle'
     select('curcleInputs').style.display = 'block'
 
@@ -40,10 +40,11 @@ select('plotCircle').onclick = () => {
 
 
 select('plotCircleBtn').onclick = () => {
-    Circle.drawCircleBresenham([
+    circle = Circle.drawCircleBresenham([
         select('centerX').value * 1,
         select('centerY').value * 1
     ], select('circleRad').value)
+    circle.render()
 }
 select('plotLineBtn').onclick = () => {
     Line.plotLineBresenham([
@@ -55,10 +56,12 @@ select('plotLineBtn').onclick = () => {
     ])
 }
 select('plotEllipseBtn').onclick = () => {
-    Ellipse.midpointPlot([
-        select('centerX').value * 1,
-        select('centerY').value * 1
+
+    elipse = Ellipse.midpointPlot([
+        select('centerXEl').value * 1,
+        select('centerYEl').value * 1
     ], select('ellipseA').value * 1, select('ellipseB').value * 1)
+    elipse.render()
 }
 
 

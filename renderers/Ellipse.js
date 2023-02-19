@@ -1,16 +1,30 @@
 import { putPixel } from "../utils/index.js";
+import Shape from "./Shape.js";
 
-export default class Ellipse {
+export default class Ellipse extends Shape {
+    constructor(center) {
+        super();
+        this.type = 'ellipse';
+        this.points = []
+        this.center = center
+    }
     static _putPixel(center, x, y) {
         for (let n of [-1, 1]) {
             for (let k of [-1, 1]) {
                 putPixel(center[0] + x * n, center[1] + y * k, '#000000')
             }
-
-
         }
     }
+    render() {
+        console.log(this.center)
+        this.points.forEach(([x, y]) => {
+
+            Ellipse._putPixel(this.center, x, y)
+        })
+    }
     static midpointPlot(center, a, b) {
+        let elipse = new Ellipse(center);
+        console.log(center)
         let bb = b * b
         let aa = a * a
         let bb2 = 2 * bb
@@ -32,7 +46,8 @@ export default class Ellipse {
                 y--;
                 d += fx + bb - fy
             }
-            Ellipse._putPixel(center, x, y)
+            elipse.points.push([x, y])
+
         }
         d = bb * (x + .5) * (x + .5) + aa * (y - 1) * (y - 1) - aa * bb
         d = parseInt(d)
@@ -47,7 +62,8 @@ export default class Ellipse {
                 x++
                 d += fx - fy + aa
             }
-            Ellipse._putPixel(center, x, y)
+
         }
+        return elipse;
     }
 }
