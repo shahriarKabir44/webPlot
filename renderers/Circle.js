@@ -1,13 +1,15 @@
-import { putPixel } from "../utils/index.js";
+import { putPixel, select } from "../utils/index.js";
 import Shape from "./Shape.js";
+
 export default class Circle extends Shape {
-    constructor(radius, center) {
+    constructor() {
         super()
-        this.radius = radius
-        this.center = center
+        this.radius = []
+        this.center = 0
         this.points = []
     }
     static _putPixels(center, x, y) {
+
         let dirs = [-1, 1]
         for (let n of dirs) {
             for (let k of dirs) {
@@ -17,18 +19,50 @@ export default class Circle extends Shape {
         }
     }
     render() {
+
         this.points.forEach(([x, y]) => {
             Circle._putPixels(this.center, x, y)
         })
     }
-    static drawCircleBresenham(center, r) {
-        let circle = new Circle(r, center)
+    renderHTML() {
+        return `<div class="plotter" id="curcleInputs${this.id}"  >
+                <h3>Plot circle</h3>
+
+                <div class="flex">
+                    <input type="text" name="" placeholder="center x" id="centerX${this.id}">
+                    <input type="text" name="" placeholder="center y" id="centerY${this.id}">
+
+                </div>
+                <div class="flex">
+                    <input type="text" name="" placeholder="circle radius" id="circleRad${this.id}">
+
+                </div>
+                <button class="plotterbtn" id="plotCircleBtn-${this.id}">Plot</button>
+            </div>`
+    }
+    handleOnRender() {
+        let center = [
+            select('centerX' + this.id).value * 1,
+            select('centerY' + this.id).value * 1
+        ]
+        let radius = select('circleRad' + this.id).value * 1
+        this.center = center
+        this.drawCircleBresenham(center, radius)
+        this.render()
+        select(`curcleInputs${this.id}`).innerHTML = ` <h3>Circle</h3>
+            radius=${radius}
+            
+            center=(${center[0]},${center[1]})
+        `
+    }
+    drawCircleBresenham(center, r) {
+
         let x = 0
         let y = r
         let d = 2 * (x + 1) ** 2 + y ** 2 + (y - 1) ** 2 - 2 * r * r
 
         while (x <= y) {
-            circle.points.push([x, y])
+            this.points.push([x, y])
 
             if (d < 0)
                 d += (4 * x + 6)
@@ -38,17 +72,16 @@ export default class Circle extends Shape {
             }
             x += 1
         }
-        return circle
+
     }
-    static midpointCircle(center, r) {
-        let circle = new Circle(r, center)
+    midpointCircle(center, r) {
 
         let x = 0
         let y = r
         let d = (5 / 4) - r
 
         while (x <= y) {
-            circle.points.push([x, y])
+            this.points.push([x, y])
             if (d < 0)
                 d += 2 * (x + 1) + 1
             else {
@@ -57,6 +90,6 @@ export default class Circle extends Shape {
             }
             x += 1
         }
-        return circle
+
     }
 }

@@ -6,15 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
 </head>
 <style>
     .flex {
         display: grid;
         grid-template-columns: 50% 50%;
-    }
-
-    .plotter {
-        display: none;
     }
 </style>
 
@@ -22,59 +19,21 @@
     <div class="flex">
         <canvas id="myCanvas" width="500" height="500" style="border: 1px solid;padding: 0;"></canvas>
         <div>
-            <button id="clear">clear</button>
+            <div id="options">
+                <select name="shapes" id="shapesOption">
+                    <option value="circle">Circle</option>
+                    <option value="ellipse">ellipse</option>
+                </select>
+                <button id="confirmSelection">add</button>
+            </div>`
+
+            <div id="container">
 
 
-            <button id="plotLine">Draw line</button>
-            <button id="plotCircle">Draw circle</button>
-            <button id="plotEllipse">Draw ellipse</button>
-            <div class="plotter" id="lineInputs" style="display: none;">
-                <h3>Plot line</h3>
-
-                <div class="flex">
-                    <input type="text" name="" placeholder="x1" id="p1x1">
-                    <input type="text" name="" placeholder="y1" id="p1y1">
-                </div>
-                <div class="flex">
-                    <input type="text" name="" placeholder="x1" id="p1x2">
-                    <input type="text" name="" placeholder="y1" id="p1y2">
-
-                </div>
-                <button id="plotLineBtn">Plot</button>
             </div>
 
 
 
-
-
-            <div class="plotter" id="ellipseInputs" style="display: none;">
-                <h3>Plot ellipse</h3>
-                <div class="flex">
-                    <input type="text" name="" placeholder="center x" id="centerXEl">
-                    <input type="text" name="" placeholder="center y" id="centerYEl">
-
-                </div>
-                <div class="flex">
-                    <input type="text" name="" placeholder="a" id="ellipseA">
-                    <input type="text" name="" placeholder="b" id="ellipseB">
-
-                </div>
-                <button id="plotEllipseBtn">Plot</button>
-            </div>
-            <div class="plotter" id="curcleInputs" style="display: none;">
-                <h3>Plot circle</h3>
-
-                <div class="flex">
-                    <input type="text" name="" placeholder="center x" id="centerX">
-                    <input type="text" name="" placeholder="center y" id="centerY">
-
-                </div>
-                <div class="flex">
-                    <input type="text" name="" placeholder="circle radius" id="circleRad">
-
-                </div>
-                <button id="plotCircleBtn">Plot</button>
-            </div>
         </div>
     </div>
 </body>
