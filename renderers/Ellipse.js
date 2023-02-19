@@ -24,6 +24,9 @@ export default class Ellipse extends Shape {
             Ellipse._putPixel(this.center, x, y)
         })
     }
+    removeHTML() {
+        select('container').removeChild(select(`ellipseInputs${this.id}`))
+    }
     renderHTML() {
         return `<div class="plotter" id="ellipseInputs${this.id}"  >
                 <h3>Plot ellipse</h3>

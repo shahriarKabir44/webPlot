@@ -11,18 +11,14 @@ export default class Shape {
         Shape.state.push(this)
         this.id = Shape.shapeCount;
     }
+    removeHTML() { }
     removeAndRender() {
-        clearCanvas()
-        plotScale()
-
+        let target = Shape.state.filter(shape => shape.id == this.id)[0]
+        target.removeHTML()
         Shape.state = Shape.state.filter(shape => shape.id != this.id)
         Shape.state.forEach((shape) => {
             shape.render()
-            console.log(shape.type)
         })
-
-        plotScale()
-
     }
     handleOnRender() { }
     renderHTML() { }
@@ -36,6 +32,7 @@ export default class Shape {
         setTimeout(() => {
             document.querySelectorAll('.deleteShapeBtn').forEach(el => {
                 el.addEventListener('click', (e) => {
+                    clearCanvas()
                     const id = e.target.id.split('-')[1]
                     Shape.state.forEach(shape => {
                         if (shape.id == id) {

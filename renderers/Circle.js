@@ -46,9 +46,10 @@ export default class Circle extends Shape {
             select('centerX' + this.id).value * 1,
             select('centerY' + this.id).value * 1
         ]
+        console.log(center)
         let radius = select('circleRad' + this.id).value * 1
         this.center = center
-        this.drawCircleBresenham(center, radius)
+        this.drawCircleBresenham(radius)
         this.render()
         select(`curcleInputs${this.id}`).innerHTML = ` <h3>Circle</h3>
             <button class="deleteShapeBtn" id="delete-${this.id}" >delete</button>
@@ -56,7 +57,10 @@ export default class Circle extends Shape {
             center=(${center[0]},${center[1]})
         `
     }
-    drawCircleBresenham(center, r) {
+    removeHTML() {
+        select('container').removeChild(select(`curcleInputs${this.id}`))
+    }
+    drawCircleBresenham(r) {
 
         let x = 0
         let y = r
@@ -75,7 +79,7 @@ export default class Circle extends Shape {
         }
 
     }
-    midpointCircle(center, r) {
+    midpointCircle(r) {
 
         let x = 0
         let y = r

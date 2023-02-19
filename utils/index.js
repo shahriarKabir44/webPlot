@@ -1,3 +1,4 @@
+import plotScale from "./plotScale.js";
 
 export const canvasContext = select('myCanvas').getContext('2d')
 
@@ -21,5 +22,8 @@ export function select(id) {
 
 
 export function clearCanvas() {
+
     canvasContext.clearRect(0, 0, select('myCanvas').width, select('myCanvas').height)
+    plotScale(select('myCanvas').width, select('myCanvas').height)
+
 }
