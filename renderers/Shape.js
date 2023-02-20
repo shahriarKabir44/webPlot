@@ -29,18 +29,16 @@ export default class Shape {
                 shape.handleOnRender()
             }
         }
-        setTimeout(() => {
-            document.querySelectorAll('.deleteShapeBtn').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    clearCanvas()
-                    const id = e.target.id.split('-')[1]
-                    Shape.state.forEach(shape => {
-                        if (shape.id == id) {
-                            shape.removeAndRender()
-                        }
-                    })
+        document.querySelectorAll('.deleteShapeBtn').forEach(el => {
+            el.addEventListener('click', (e) => {
+                clearCanvas()
+                const id = e.target.id.split('-')[1]
+                Shape.state.forEach(shape => {
+                    if (shape.id == id) {
+                        shape.removeAndRender()
+                    }
                 })
             })
-        }, 100);
+        })
     }
 }
