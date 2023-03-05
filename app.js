@@ -1,9 +1,9 @@
 import plotScale from './utils/plotScale.js'
 import { select, clearCanvas } from "./utils/index.js";
-import Line from "./renderers/Line.js";
-import Circle from './renderers/Circle.js'
-import Ellipse from './renderers/Ellipse.js';
-import Shape from './renderers/Shape.js';
+import Line from "./shapes/Line.js";
+import Circle from './shapes/Circle.js'
+import Ellipse from './shapes/Ellipse.js';
+import Shape from './shapes/Shape.js';
 const { height, width } = select('myCanvas').getBoundingClientRect()
 plotScale(height, width)
 
