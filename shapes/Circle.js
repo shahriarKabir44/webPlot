@@ -6,70 +6,60 @@ export default class Circle extends Shape {
         super()
         this.radius = []
         this.center = 0
-        this.points = []
         this.type = 'circle'
     }
-    static _putPixels(center, x, y) {
+    completeRendering() {
+        select(`inputs${this.id}`).innerHTML = ` <h3>Circle</h3>
 
-        let dirs = [-1, 1]
-        for (let n of dirs) {
-            for (let k of dirs) {
-                putPixel(center[0] + x * n, center[1] + y * k)
-                putPixel(center[0] + y * n, center[1] + x * k)
-            }
-        }
+            radius=${this.radius}
+            center=(${this.center[0]},${this.center[1]})
+            <button class="deleteShapeBtn" id="delete-${this.id}" >delete</button>`
+
     }
-    render() {
+    putPixelUtil(x, y) {
+        Shape.setGridVal(this.center[0] + x, this.center[1] + y, 1 << this.id)
+        this.points.push([this.center[0] + x, this.center[1] + y])
 
-        this.points.forEach(([x, y]) => {
-            Circle._putPixels(this.center, x, y)
-        })
     }
-    renderHTML() {
-        return `<div class="plotter" id="curcleInputs${this.id}"  >
-                <h3>Plot circle</h3>
 
-                <div class="flex">
-                    <input type="text" name="" placeholder="center x" id="centerX${this.id}">
-                    <input type="text" name="" placeholder="center y" id="centerY${this.id}">
 
-                </div>
-                <div class="flex">
-                    <input type="text" name="" placeholder="circle radius" id="circleRad${this.id}">
 
-                </div>
-                <button class="plotterbtn" id="plotCircleBtn-${this.id}">Plot</button>
-            </div>`
-    }
     handleOnRender() {
-        let center = [
-            select('centerX' + this.id).value * 1,
-            select('centerY' + this.id).value * 1
-        ]
-        console.log(center)
-        let radius = select('circleRad' + this.id).value * 1
-        this.center = center
+        let [p1, p2] = Shape.getEndpoints(this.id)
+        let [dx, dy] = Shape.getSize(this.id)
+        let radius = Math.min(dx, dy)
+        this.center = p1
+
         this.drawCircleBresenham(radius)
+
         this.render()
-        select(`curcleInputs${this.id}`).innerHTML = ` <h3>Circle</h3>
-            
-            radius=${radius}
-            center=(${center[0]},${center[1]})
-            <button class="deleteShapeBtn" id="delete-${this.id}" >delete</button>
-        `
+        // select(`curcleInputs${this.id}`).innerHTML = ` <h3>Circle</h3>
+
+        //     radius=${radius}
+        //     center=(${center[0]},${center[1]})
+        //     <button class="deleteShapeBtn" id="delete-${this.id}" >delete</button>
+        // `
     }
     removeHTML() {
         select('container').removeChild(select(`curcleInputs${this.id}`))
+    }
+    addPoints(x, y) {
+        let dirs = [-1, 1]
+        for (let n of dirs) {
+            for (let k of dirs) {
+                this.putPixelUtil(x * n, y * k)
+                this.putPixelUtil(y * n, x * k)
+            }
+        }
+
     }
     drawCircleBresenham(r) {
 
         let x = 0
         let y = r
         let d = 2 * (x + 1) ** 2 + y ** 2 + (y - 1) ** 2 - 2 * r * r
-
         while (x <= y) {
-            this.points.push([x, y])
-
+            this.addPoints(x, y)
             if (d < 0)
                 d += (4 * x + 6)
             else {
@@ -87,7 +77,7 @@ export default class Circle extends Shape {
         let d = (5 / 4) - r
 
         while (x <= y) {
-            this.points.push([x, y])
+            this.addPoints(x, y)
             if (d < 0)
                 d += 2 * (x + 1) + 1
             else {

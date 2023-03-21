@@ -10,49 +10,8 @@ export default class Ellipse extends Shape {
         this.type = 'ellipse';
         this.points = []
     }
-    static _putPixel(center, x, y) {
-        for (let n of [-1, 1]) {
-            for (let k of [-1, 1]) {
-                putPixel(center[0] + x * n, center[1] + y * k, '#000000')
-            }
-        }
-    }
-    render() {
-        this.points.forEach(([x, y]) => {
-
-            Ellipse._putPixel(this.center, x, y)
-        })
-    }
-    removeHTML() {
-        select('container').removeChild(select(`ellipseInputs${this.id}`))
-    }
-    renderHTML() {
-        return `<div class="plotter" id="ellipseInputs${this.id}"  >
-                <h3>Plot ellipse</h3>
-                <div class="flex">
-                    <input type="text" name="" placeholder="center x" id="centerXEl${this.id}">
-                    <input type="text" name="" placeholder="center y" id="centerYEl${this.id}">
-
-                </div>
-                <div class="flex">
-                    <input type="text" name="" placeholder="a" id="ellipseA${this.id}">
-                    <input type="text" name="" placeholder="b" id="ellipseB${this.id}">
-
-                </div>
-                <button class="plotterbtn" id="plotEllipseBtn-${this.id}">Plot</button>
-            </div>`
-    }
-    handleOnRender() {
-        let center = [
-            select(`centerXEl${this.id}`).value * 1,
-            select(`centerYEl${this.id}`).value * 1
-        ]
-        let a = select(`ellipseA${this.id}`).value * 1
-        let b = select(`ellipseB${this.id}`).value * 1
-        this.center = center
-        this.midpointPlot(center, a, b)
-        this.render()
-        select(`ellipseInputs${this.id}`).innerHTML = ` <h3>Ellipse</h3>
+    completeRendering() {
+        select(`inputs${this.id}`).innerHTML = ` <h3>Ellipse</h3>
             a=${a}
             b=${b}
             center=(${center[0]},${center[1]})
@@ -60,7 +19,31 @@ export default class Ellipse extends Shape {
 
         `
     }
-    midpointPlot(center, a, b) {
+    addPoint(x, y) {
+        for (let n of [-1, 1]) {
+            for (let k of [-1, 1]) {
+                this.points.push([this.center[0] + x * n, this.center[1] + y * k])
+            }
+        }
+    }
+
+    removeHTML() {
+        select('container').removeChild(select(`inputs${this.id}`))
+    }
+
+    handleOnRender() {
+        let [p1, p2] = Shape.getEndpoints(this.id)
+        let [dx, dy] = Shape.getSize(this.id)
+
+        let a = dx
+        let b = dy
+        let center = p1
+        this.center = center
+        this.midpointPlot(a, b)
+        this.render()
+
+    }
+    midpointPlot(a, b) {
 
         let bb = b * b
         let aa = a * a
@@ -83,7 +66,7 @@ export default class Ellipse extends Shape {
                 y--;
                 d += fx + bb - fy
             }
-            this.points.push([x, y])
+            this.addPoint(x, y)
 
         }
         d = bb * (x + .5) * (x + .5) + aa * (y - 1) * (y - 1) - aa * bb
@@ -99,7 +82,7 @@ export default class Ellipse extends Shape {
                 x++
                 d += fx - fy + aa
             }
-            this.points.push([x, y])
+            this.addPoint(x, y)
         }
 
     }

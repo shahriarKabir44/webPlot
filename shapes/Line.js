@@ -7,7 +7,6 @@ export default class Line extends Shape {
         this.type = "line"
         this.start = null
         this.end = null
-        this.points = []
     }
     plotLineDDL(start, end) {
         if (start[0] > end[0]) {
@@ -33,44 +32,22 @@ export default class Line extends Shape {
             }
         }
     }
-    render() {
-        this.points.forEach(([x, y]) => {
-            putPixel(x, y)
-        })
-    }
-    renderHTML() {
-        return `<div class="plotter" id="lineInputs${this.id}"  >
-                <h3>Plot line</h3>
-                <div class="flex">
-                    <input type="text" name="" placeholder="x1" id="x1${this.id}">
-                    <input type="text" name="" placeholder="y1" id="y1${this.id}">
 
-                </div>
-                <div class="flex">
-                    <input type="text" name="" placeholder="x2" id="x2${this.id}">
-                    <input type="text" name="" placeholder="y2" id="y2${this.id}">
-                </div>
-                <button class="plotterbtn" id="plotLineBtn-${this.id}">Plot</button>
-            </div>`
-    }
-    handleOnRender() {
-        let start = [
-            select(`x1${this.id}`).value * 1,
-            select(`y1${this.id}`).value * 1
-        ]
-        let end = [
-            select(`x2${this.id}`).value * 1,
-            select(`y2${this.id}`).value * 1
-        ]
-
-        this.plotLineBresenham(start, end)
-        this.render()
+    completeRendering() {
         select(`lineInputs${this.id}`).innerHTML = ` <h3>Line</h3>
             start=${start}
             end=${end}
             <button class="deleteShapeBtn" id="delete-${this.id}" >delete</button>
 
         `
+    }
+
+    handleOnRender() {
+        let [start, end] = Shape.getEndpoints(this.id)
+
+        this.plotLineBresenham(start, end)
+        this.render()
+
     }
     removeHTML() {
         select('container').removeChild(select(`lineInputs${this.id}`))
