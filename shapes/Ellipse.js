@@ -50,6 +50,8 @@ export default class Ellipse extends Shape {
         this.center = center
         this.points = []
         this.midpointPlot()
+        this.angleRotation(select(`angle${this.id}`).innerHTML * 1 * Math.PI / 180)
+
         this.render()
 
     }

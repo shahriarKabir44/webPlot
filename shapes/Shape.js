@@ -11,6 +11,8 @@ export default class Shape {
     static selectedShapeForOperation = null
     static operationMode = 0
     static canReRender = true
+    axisAngle = Math.PI / 2
+    isActive = false
     type = ""
     oldPoints = []
     points = []
@@ -27,6 +29,40 @@ export default class Shape {
         } catch (error) {
 
         }
+    }
+    static calculateAngle(p1, p2) {
+        if (p1[0] == p2[0]) {
+            if (p1[1] > p2[1]) {
+                return 3 * Math.PI / 2
+            }
+            else return Math.PI / 2
+        }
+        if (p1[1] == p2[0]) {
+            if (p1[0] > p2[0]) return 0
+            else return Math.PI
+        }
+        return Math.atan((p1[1] - p2[1]) / (p1[0] - p2[0]))
+    }
+    static rotatePoint(theta, T, p) {
+        let [x, y] = p
+        let [tx, ty] = T
+        return [
+            Math.floor(Math.cos(theta) * (x - tx) - Math.sin(theta) * (ty - y) + tx),
+            Math.floor(Math.sin(theta) * (tx - x) + Math.cos(theta) * (y - ty) + ty)
+        ]
+    }
+    rotateTo(point) {
+        point[1] = 500 - point[1]
+        const angle = Shape.calculateAngle(point, this.center)
+        select(`angle${this.id}`).innerHTML = -angle * 180 / Math.PI
+
+
+        // console.log(this.points)
+    }
+    angleRotation(angle) {
+        this.points = this.points.map(point => {
+            return Shape.rotatePoint(angle, this.center, point)
+        })
     }
     completeRendering() { }
     calculatePoints() { }
@@ -64,24 +100,38 @@ export default class Shape {
 
     }
     constructor() {
+        this.isActive = true
         this.color = "#000000"
         Shape.state.push(this)
         this.id = Shape.shapeCount;
         Shape.shapeCount++;
+        this.axisAngle = 0
 
     }
-    dragTo(newCenter) {
-
-
-    }
+    dragTo(newCenter) { }
     removeHTML() { }
 
     reRenderOnMove() { }
 
+
+    deactive() {
+        this.isActive = false
+        this.handleOnRender()
+        this.angleRotation(this.axisAngle)
+
+    }
     static selectShapeForDrag(shapeId) {
         this.operationMode = DRAG
         this.selectedShapeForOperation = this.state.filter(shape => shape.id == shapeId)[0]
         this.selectedShapeForOperation.enableOperation()
+        this.selectedShapeForOperation.isActive = true
+    }
+    static selectShapeForRotation(shapeId) {
+        this.operationMode = ROTATE
+        this.selectedShapeForOperation = this.state.filter(shape => shape.id == shapeId)[0]
+        this.selectedShapeForOperation.enableOperation()
+
+
     }
     enableOperation() {
         this.color = "#eb1809"
@@ -97,9 +147,7 @@ export default class Shape {
     handleOnRender() {
 
     }
-    getPointsCopy() {
-        return JSON.parse(JSON.stringify(this.points))
-    }
+
     renderHTML() {
         return `<div class="plotter" id="inputs${this.id}"  >
                 <h3>Plot ${this.type}</h3>
@@ -122,12 +170,21 @@ export default class Shape {
                             <p>endY=</p> <p  id="endy${this.id}">0</p>
                         </div>
                     </div>
+                    <div class="flex">
+                        <div class="flex">
+                            <p>rotation(degree) = </p> <p id="angle${this.id}">0</p>
+                        </div>
+                          
+                    </div>
                 </div>
                 
                 <button class="dragBtn" id="shape-${this.id}">drag</button>
+                <button class="rotateBtn" id="shape-${this.id}">rotate</button>
             </div>`
     }
     render() {
+
+
         this.points.forEach(([x, y]) => {
             putPixel(x, y, this.color)
         })
@@ -138,11 +195,16 @@ export default class Shape {
 
         select(`endx${this.id}`).innerHTML = end[0]
         select(`endy${this.id}`).innerHTML = end[1]
-
     }
 
     static handlePlot(shape) {
-        shape.handleOnRender()
+        if (shape.isActive) {
+
+            shape.handleOnRender()
+        }
+
+        else
+            shape.render()
 
     }
 

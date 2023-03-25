@@ -54,6 +54,7 @@ export default class Circle extends Shape {
 
     }
     drawCircleBresenham() {
+        this.oldPoints = this.points
         this.points = []
         let x = 0
         let y = this.radius

@@ -1,4 +1,4 @@
-import { select, DRAG, INSERTION } from "./utils/index.js";
+import { select, DRAG, INSERTION, ROTATE } from "./utils/index.js";
 import Line from "./shapes/Line.js";
 import Circle from './shapes/Circle.js'
 import Ellipse from './shapes/Ellipse.js';
@@ -38,6 +38,13 @@ select('confirmSelection').onclick = () => {
                 Shape.selectShapeForDrag(shapeId)
             })
         })
+        document.querySelectorAll('.rotateBtn').forEach(e => {
+            e.addEventListener('click', el => {
+                const shapeId = el.target.id.split('-')[1]
+
+                Shape.selectShapeForRotation(shapeId)
+            })
+        })
     }, 200);
 }
 
@@ -48,8 +55,10 @@ let dragStart = false
 select('myCanvas').onmousedown = (e) => {
 
 
-    let point = [e.clientX - select('myCanvas').getBoundingClientRect().x, 500 -
-        e.clientY - select('myCanvas').getBoundingClientRect().y]
+    let point = [
+        (e.clientX - select('myCanvas').getBoundingClientRect().x), 500 -
+        e.clientY - select('myCanvas').getBoundingClientRect().y
+    ]
     point1 = point
     point2 = point
     checkDragStatus()
@@ -60,9 +69,13 @@ select('myCanvas').onmouseup = e => {
     dragStart = false
     if (Shape.operationMode != INSERTION) {
         Shape.selectedShapeForOperation.color = "#000000"
+        Shape.selectedShapeForOperation.deactive()
         //Shape.selectedShapeForOperation = null
     }
     Shape.operationMode = INSERTION
+    if (Shape.lastShape) {
+        Shape.lastShape.deactive()
+    }
 }
 
 
@@ -80,7 +93,7 @@ function keepRefreshingCanvas() {
     Shape.removePreviousPixels()
     setTimeout(() => {
         keepRefreshingCanvas()
-    }, 100);
+    }, 200);
 
 }
 
@@ -104,8 +117,11 @@ function mainHandler() {
     if (Shape.operationMode == INSERTION) {
         plottingHandler()
     }
-    else {
+    else if (Shape.operationMode == DRAG) {
         draggingHandler()
+    }
+    else if (Shape.operationMode == ROTATE) {
+        Shape.selectedShapeForOperation.rotateTo(point2)
     }
 
 }
@@ -125,7 +141,13 @@ function plottingHandler() {
     }
 }
 
+
+
 function draggingHandler() {
     Shape.selectedShapeForOperation.dragTo(point2)
     //console.log(point2)
+}
+
+function rotationHandler() {
+    Shape.selectedShapeForOperation.rotateTo(point2)
 }
