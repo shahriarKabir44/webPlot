@@ -18,6 +18,14 @@ export default class Ellipse extends Shape {
 
         `
     }
+    dragTo(newCenter) {
+        select(`startx${this.id}`).innerHTML = newCenter[0]
+        select(`starty${this.id}`).innerHTML = newCenter[1]
+
+        select(`endx${this.id}`).innerHTML = newCenter[0] + this.a
+        select(`endy${this.id}`).innerHTML = newCenter[1] + this.b
+
+    }
     addPoint(x, y) {
         for (let n of [-1, 1]) {
             for (let k of [-1, 1]) {
@@ -36,14 +44,18 @@ export default class Ellipse extends Shape {
 
         let a = dx
         let b = dy
+        this.a = a
+        this.b = b
         let center = p1
         this.center = center
-        this.midpointPlot(a, b)
+        this.points = []
+        this.midpointPlot()
         this.render()
 
     }
-    midpointPlot(a, b) {
-
+    midpointPlot() {
+        let a = this.a
+        let b = this.b
         let bb = b * b
         let aa = a * a
         let bb2 = 2 * bb

@@ -8,7 +8,8 @@ export default class Line extends Shape {
         this.start = null
         this.end = null
     }
-    plotLineDDL(start, end) {
+    plotLineDDL() {
+        let { start, end } = this
         if (start[0] > end[0]) {
             [start, end] = [end, start]
         }
@@ -41,18 +42,39 @@ export default class Line extends Shape {
 
         `
     }
+    dragTo(newCenter) {
+        let dx = -(this.center[0] - newCenter[0])
+        let dy = -(this.center[1] - newCenter[1])
+        this.start[0] += dx
+        this.start[1] += dy
 
+        this.end[0] += dx
+        this.end[1] += dy
+        select(`startx${this.id}`).innerHTML = this.start[0]
+        select(`starty${this.id}`).innerHTML = this.start[1]
+
+        select(`endx${this.id}`).innerHTML = this.end[0]
+        select(`endy${this.id}`).innerHTML = this.end[1]
+        this.center = newCenter
+    }
     handleOnRender() {
         let [start, end] = Shape.getEndpoints(this.id)
-
-        this.plotLineBresenham(start, end)
+        this.center = [
+            (start[0] + end[0]) >> 1,
+            (start[1] + end[1]) >> 1
+        ]
+        this.start = start
+        this.end = end
+        this.points = []
+        this.plotLineBresenham()
         this.render()
 
     }
     removeHTML() {
         select('container').removeChild(select(`lineInputs${this.id}`))
     }
-    plotLineBresenham(start, end) {
+    plotLineBresenham() {
+        let { start, end } = this
         if (start[0] > end[0]) {
             [start, end] = [end, start]
         }

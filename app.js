@@ -34,7 +34,7 @@ select('confirmSelection').onclick = () => {
         document.querySelectorAll('.dragBtn').forEach(e => {
             e.addEventListener('click', el => {
                 const shapeId = el.target.id.split('-')[1]
-                //console.log()
+
                 Shape.selectShapeForDrag(shapeId)
             })
         })
@@ -58,6 +58,11 @@ select('myCanvas').onmousedown = (e) => {
 }
 select('myCanvas').onmouseup = e => {
     dragStart = false
+    if (Shape.operationMode != INSERTION) {
+        Shape.selectedShapeForOperation.color = "#000000"
+        //Shape.selectedShapeForOperation = null
+    }
+    Shape.operationMode = INSERTION
 }
 
 
@@ -121,6 +126,6 @@ function plottingHandler() {
 }
 
 function draggingHandler() {
-    Shape.selectShapeForDrag.dragTo(point2)
+    Shape.selectedShapeForOperation.dragTo(point2)
     //console.log(point2)
 }

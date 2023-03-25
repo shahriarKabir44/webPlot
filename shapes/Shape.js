@@ -33,11 +33,11 @@ export default class Shape {
     static getEndpoints(id) {
         try {
             return [
-                [select(`startx${id}`).value * 1,
-                select(`starty${id}`).value * 1],
+                [select(`startx${id}`).innerHTML * 1,
+                select(`starty${id}`).innerHTML * 1],
 
-                [select(`endx${id}`).value * 1,
-                select(`endy${id}`).value * 1]
+                [select(`endx${id}`).innerHTML * 1,
+                select(`endy${id}`).innerHTML * 1]
             ]
         } catch (error) {
         }
@@ -74,16 +74,14 @@ export default class Shape {
 
 
     }
-    initialPlot() { }
     removeHTML() { }
 
     reRenderOnMove() { }
 
     static selectShapeForDrag(shapeId) {
         this.operationMode = DRAG
-        this.selectShapeForDrag = this.state.filter(shape => shape.id == shapeId)[0]
-
-        this.selectShapeForDrag.enableOperation()
+        this.selectedShapeForOperation = this.state.filter(shape => shape.id == shapeId)[0]
+        this.selectedShapeForOperation.enableOperation()
     }
     enableOperation() {
         this.color = "#eb1809"
@@ -105,17 +103,27 @@ export default class Shape {
     renderHTML() {
         return `<div class="plotter" id="inputs${this.id}"  >
                 <h3>Plot ${this.type}</h3>
-
-                <div class="flex">
-                    <input type="text" name="" placeholder="start x" id="startx${this.id}">
-                    <input type="text" name="" placeholder="start y" id="starty${this.id}">
-
+                <div class="plotterContainer">
+                    <div class="flex">
+                        <div class="flex">
+                            <p>startX= </p> <p id="startx${this.id}">0</p>
+                        </div>
+                        <div class="flex">
+                             <p>startY=</p> <p  id="starty${this.id}">0</p>
+                        </div>
+                    </div>
+                        
+                    
+                    <div class="flex">
+                        <div class="flex">
+                            <p>endX= </p> <p id="endx${this.id}">0</p>
+                        </div>
+                        <div class="flex">
+                            <p>endY=</p> <p  id="endy${this.id}">0</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex">
-                    <input type="text" name="" placeholder="end x" id="endx${this.id}">
-                    <input type="text" name="" placeholder="end y" id="endy${this.id}">
-
-                </div>
+                
                 <button class="dragBtn" id="shape-${this.id}">drag</button>
             </div>`
     }
@@ -125,16 +133,16 @@ export default class Shape {
         })
     }
     showEndPoints(start, end) {
-        select(`startx${this.id}`).value = start[0]
-        select(`starty${this.id}`).value = start[1]
+        select(`startx${this.id}`).innerHTML = start[0]
+        select(`starty${this.id}`).innerHTML = start[1]
 
-        select(`endx${this.id}`).value = end[0]
-        select(`endy${this.id}`).value = end[1]
+        select(`endx${this.id}`).innerHTML = end[0]
+        select(`endy${this.id}`).innerHTML = end[1]
 
     }
 
     static handlePlot(shape) {
-        shape.initialPlot()
+        shape.handleOnRender()
 
     }
 

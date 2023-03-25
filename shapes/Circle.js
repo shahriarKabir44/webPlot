@@ -21,14 +21,15 @@ export default class Circle extends Shape {
 
     }
     dragTo(newCenter) {
-        select(`startx${this.id}`).value = newCenter[0]
-        select(`starty${this.id}`).value = newCenter[1]
+        select(`startx${this.id}`).innerHTML = newCenter[0]
+        select(`starty${this.id}`).innerHTML = newCenter[1]
 
-        select(`endx${this.id}`).value = newCenter[0] * 1 + this.radius
-        select(`endy${this.id}`).value = newCenter[1] * 1 + this.radius
-
+        select(`endx${this.id}`).innerHTML = newCenter[0] * 1 + this.radius
+        select(`endy${this.id}`).innerHTML = newCenter[1] * 1 + this.radius
+        this.center = newCenter
     }
-    initialPlot() {
+
+    handleOnRender() {
         let [p1, p2] = Shape.getEndpoints(this.id)
         let [dx, dy] = Shape.getSize(this.id)
         let radius = Math.min(dx, dy)
@@ -38,17 +39,6 @@ export default class Circle extends Shape {
         this.drawCircleBresenham()
 
         this.render()
-    }
-
-    handleOnRender() {
-        this.drawCircleBresenham()
-        this.render()
-        // select(`curcleInputs${this.id}`).innerHTML = ` <h3>Circle</h3>
-
-        //     radius=${radius}
-        //     center=(${center[0]},${center[1]})
-        //     <button class="deleteShapeBtn" id="delete-${this.id}" >delete</button>
-        // `
     }
     removeHTML() {
         select('container').removeChild(select(`curcleInputs${this.id}`))
