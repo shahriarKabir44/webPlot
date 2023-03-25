@@ -1,7 +1,9 @@
 import plotScale from "./plotScale.js";
 
 export const canvasContext = select('myCanvas').getContext('2d')
-
+export const DRAG = 1;
+export const ROTATE = 2;
+export const INSERTION = 0;
 export function putPixel(x, y, color = '#000000') {
     y = 500 - 16 - y
     canvasContext.fillStyle = color;

@@ -1,24 +1,34 @@
 import plotScale from "../utils/plotScale.js";
-import { clearCanvas, putPixel, select, _putPixel } from "../utils/index.js";
+import { clearCanvas, putPixel, select, _putPixel, DRAG, ROTATE, INSERTION } from "../utils/index.js";
+
+
+
 export default class Shape {
     static state = []
     static shapeCount = 1
     static lastShape = null;
     static grid = {}
+    static selectedShapeForOperation = null
+    static operationMode = 0
+    static canReRender = true
+    type = ""
+    oldPoints = []
+    points = []
+    center = []
     static init() {
         this.grid = new Array(600).fill(0)
         for (let n = 0; n < 600; n++)this.grid[n] = {}
         plotScale()
     }
     static setGridVal(x, y, val) {
-        Shape.grid[x][y] = val
+        try {
+            Shape.grid[x][y] = val
 
+        } catch (error) {
+
+        }
     }
     completeRendering() { }
-    static canReRender = true
-    type = ""
-    oldPoints = []
-    points = []
     calculatePoints() { }
     static getEndpoints(id) {
         try {
@@ -30,7 +40,6 @@ export default class Shape {
                 select(`endy${id}`).value * 1]
             ]
         } catch (error) {
-            console.log(id)
         }
 
     }
@@ -49,24 +58,36 @@ export default class Shape {
         clearCanvas()
 
         this.state.forEach(shape => {
-            Shape.handlePlot(shape.id)
+            Shape.handlePlot(shape)
         })
 
 
     }
     constructor() {
-
+        this.color = "#000000"
         Shape.state.push(this)
         this.id = Shape.shapeCount;
         Shape.shapeCount++;
 
     }
-    removeHTML() { }
+    dragTo(newCenter) {
 
-    reRenderOnMove() {
 
     }
+    initialPlot() { }
+    removeHTML() { }
 
+    reRenderOnMove() { }
+
+    static selectShapeForDrag(shapeId) {
+        this.operationMode = DRAG
+        this.selectShapeForDrag = this.state.filter(shape => shape.id == shapeId)[0]
+
+        this.selectShapeForDrag.enableOperation()
+    }
+    enableOperation() {
+        this.color = "#eb1809"
+    }
     removeAndRender() {
         let target = Shape.state.filter(shape => shape.id == this.id)[0]
         target.removeHTML()
@@ -95,11 +116,12 @@ export default class Shape {
                     <input type="text" name="" placeholder="end y" id="endy${this.id}">
 
                 </div>
+                <button class="dragBtn" id="shape-${this.id}">drag</button>
             </div>`
     }
     render() {
         this.points.forEach(([x, y]) => {
-            putPixel(x, y)
+            putPixel(x, y, this.color)
         })
     }
     showEndPoints(start, end) {
@@ -111,10 +133,9 @@ export default class Shape {
 
     }
 
-    static handlePlot(id) {
-
-        let targetShape = this.state.filter(shape => shape.id == id)[0]
-        targetShape.handleOnRender()
+    static handlePlot(shape) {
+        shape.initialPlot()
 
     }
+
 }

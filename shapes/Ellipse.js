@@ -4,7 +4,6 @@ import Shape from "./Shape.js";
 export default class Ellipse extends Shape {
     constructor() {
         super();
-        this.center = null
         this.a = 0
         this.b = 0
         this.type = 'ellipse';

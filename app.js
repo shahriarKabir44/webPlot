@@ -1,4 +1,4 @@
-import { select, clearCanvas } from "./utils/index.js";
+import { select, DRAG, INSERTION } from "./utils/index.js";
 import Line from "./shapes/Line.js";
 import Circle from './shapes/Circle.js'
 import Ellipse from './shapes/Ellipse.js';
@@ -23,7 +23,6 @@ select('confirmSelection').onclick = () => {
     }
     Shape.lastShape = newShape;
     select('container').innerHTML += newShape.renderHTML()
-    console.log(Shape.getEndpoints(1))
     setTimeout(() => {
         document.querySelectorAll('.plotterbtn').forEach(e => {
             e.addEventListener('click', el => {
@@ -32,7 +31,14 @@ select('confirmSelection').onclick = () => {
                 Shape.handlePlot(shapeId)
             })
         })
-    }, 100);
+        document.querySelectorAll('.dragBtn').forEach(e => {
+            e.addEventListener('click', el => {
+                const shapeId = el.target.id.split('-')[1]
+                //console.log()
+                Shape.selectShapeForDrag(shapeId)
+            })
+        })
+    }, 200);
 }
 
 let point1 = null
@@ -40,18 +46,18 @@ let point2 = null
 let dragStart = false
 
 select('myCanvas').onmousedown = (e) => {
-    checkDragStatus()
+
 
     let point = [e.clientX - select('myCanvas').getBoundingClientRect().x, 500 -
         e.clientY - select('myCanvas').getBoundingClientRect().y]
     point1 = point
     point2 = point
+    checkDragStatus()
     dragStart = true
 
 }
 select('myCanvas').onmouseup = e => {
     dragStart = false
-    Shape.removePreviousPixels()
 }
 
 
@@ -90,22 +96,18 @@ function checkDragStatus() {
 }
 
 function mainHandler() {
+    if (Shape.operationMode == INSERTION) {
+        plottingHandler()
+    }
+    else {
+        draggingHandler()
+    }
 
+}
+
+function plottingHandler() {
     if (Shape.lastShape == null) return
-    // if (Shape.lastShape.type == 'line') {
 
-    //     if (Shape.lastShape.start == null) {
-
-    //         select('x1' + Shape.lastShape.id).value = point[0]
-    //         select('y1' + Shape.lastShape.id).value = point[1]
-    //         Shape.lastShape.start = point
-    //     }
-    //     else if (Shape.lastShape.end == null) {
-    //         Shape.lastShape.end = point
-    //         select('x2' + Shape.lastShape.id).value = point[0]
-    //         select('y2' + Shape.lastShape.id).value = point[1]
-    //     }
-    // }
     else {
         Shape.lastShape.showEndPoints(point1, point2)
         Shape.lastShape.points = []
@@ -116,14 +118,9 @@ function mainHandler() {
 
         }
     }
-    // else if (Shape.lastShape.type == 'circle') {
-    //     // select('centerX' + Shape.lastShape.id).value = point[0]
-    //     // select('centerY' + Shape.lastShape.id).value = point[1]
-
-    // }
-    // else if (Shape.lastShape.type == 'ellipse') {
-    //     select('centerXEl' + Shape.lastShape.id).value = point[0]
-    //     select('centerYEl' + Shape.lastShape.id).value = point[1]
-
 }
 
+function draggingHandler() {
+    Shape.selectShapeForDrag.dragTo(point2)
+    //console.log(point2)
+}
