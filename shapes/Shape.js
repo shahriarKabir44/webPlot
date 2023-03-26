@@ -7,7 +7,6 @@ export default class Shape {
     static state = []
     static shapeCount = 1
     static lastShape = null;
-    static grid = {}
     static selectedShapeForOperation = null
     static operationMode = 0
     static canReRender = true
@@ -17,19 +16,13 @@ export default class Shape {
     oldPoints = []
     points = []
     center = []
+    static selectShape(id) {
+        return this.state.filter(shape => shape.id == id)[0]
+    }
     static init() {
-        this.grid = new Array(600).fill(0)
-        for (let n = 0; n < 600; n++)this.grid[n] = {}
         plotScale()
     }
-    static setGridVal(x, y, val) {
-        try {
-            Shape.grid[x][y] = val
 
-        } catch (error) {
-
-        }
-    }
     static calculateAngle(p1, p2) {
         if (p1[0] == p2[0]) {
             if (p1[1] > p2[1]) {
@@ -46,22 +39,26 @@ export default class Shape {
     static rotatePoint(theta, T, p) {
         let [x, y] = p
         let [tx, ty] = T
+        let [cosx, sinx] = theta
         return [
-            Math.floor(Math.cos(theta) * (x - tx) - Math.sin(theta) * (ty - y) + tx),
-            Math.floor(Math.sin(theta) * (tx - x) + Math.cos(theta) * (y - ty) + ty)
+            Math.floor(cosx * (x - tx) - sinx * (ty - y) + tx),
+            Math.floor(sinx * (tx - x) + cosx * (y - ty) + ty)
         ]
     }
     rotateTo(point) {
         point[1] = 500 - point[1]
-        const angle = Shape.calculateAngle(point, this.center)
-        select(`angle${this.id}`).innerHTML = -angle * 180 / Math.PI
-
-
-        // console.log(this.points)
+        let angle = Shape.calculateAngle(point, this.center)
+        angle = Math.abs(angle)
+        select(`angle${this.id}`).innerHTML = angle * 180 / Math.PI
     }
-    angleRotation(angle) {
+    angleRotation() {
+        let angle = select(`angle${this.id}`).innerHTML * 1 * Math.PI / 180
+        let cosx = Math.cos(-angle)
+        let sinx = Math.sin(-angle)
         this.points = this.points.map(point => {
-            return Shape.rotatePoint(angle, this.center, point)
+            return Shape.rotatePoint([
+                cosx, sinx
+            ], this.center, point)
         })
     }
     completeRendering() { }
@@ -116,19 +113,19 @@ export default class Shape {
 
     deactive() {
         this.isActive = false
-        this.handleOnRender()
-        this.angleRotation(this.axisAngle)
+        this.runPipeline()
+
 
     }
     static selectShapeForDrag(shapeId) {
         this.operationMode = DRAG
-        this.selectedShapeForOperation = this.state.filter(shape => shape.id == shapeId)[0]
+        this.selectedShapeForOperation = this.selectShape(shapeId)
         this.selectedShapeForOperation.enableOperation()
         this.selectedShapeForOperation.isActive = true
     }
     static selectShapeForRotation(shapeId) {
         this.operationMode = ROTATE
-        this.selectedShapeForOperation = this.state.filter(shape => shape.id == shapeId)[0]
+        this.selectedShapeForOperation = this.selectShape(shapeId)
         this.selectedShapeForOperation.enableOperation()
 
 
@@ -138,10 +135,9 @@ export default class Shape {
     }
     removeAndRender() {
         let target = Shape.state.filter(shape => shape.id == this.id)[0]
-        target.removeHTML()
         Shape.state = Shape.state.filter(shape => shape.id != this.id)
         Shape.state.forEach((shape) => {
-            shape.render()
+            shape.runPipeline()
         })
     }
     handleOnRender() {
@@ -180,11 +176,23 @@ export default class Shape {
                 
                 <button class="dragBtn" id="shape-${this.id}">drag</button>
                 <button class="rotateBtn" id="shape-${this.id}">rotate</button>
+                <div class="flex">
+                    <div class="scaleContainer">
+                        <p>sx=</p>
+                        <button class="scalebtnxup" id="shape-${this.id}">+</button>
+                        <p id="sx-${this.id}">1</p>
+                        <button class="scalebtnyup" id="shape-${this.id}">-</button>
+                    </div>
+                    <div class="scaleContainer">
+                        <p>sy=</p>
+                        <button class="scalebtnxdn" id="shape-${this.id}">+</button>
+                        <p id="sy-${this.id}">1</p>
+                        <button class="scalebtnydn" id="shape-${this.id}">-</button>
+                    </div>
+                </div>
             </div>`
     }
     render() {
-
-
         this.points.forEach(([x, y]) => {
             putPixel(x, y, this.color)
         })
@@ -200,11 +208,36 @@ export default class Shape {
     static handlePlot(shape) {
         if (shape.isActive) {
 
-            shape.handleOnRender()
+            shape.runPipeline()
         }
 
-        else
+        else {
             shape.render()
+        }
+
+    }
+    static scale(shapeId) {
+        this.selectShape(shapeId)
+            .runPipeline()
+    }
+    scale() {
+        let factorX = select(`sx-${this.id}`).innerHTML * 1
+        let factorY = select(`sy-${this.id}`).innerHTML * 1
+        let [h, k] = this.center
+        this.points = this.points.map(([x, y]) => {
+            return [
+                x * factorX - h * (factorX - 1),
+                y * factorY - k * (factorY - 1)
+            ]
+        })
+    }
+    runPipeline() {
+        this.handleOnRender()
+        this.scale()
+        this.angleRotation()
+
+        this.render()
+
 
     }
 

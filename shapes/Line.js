@@ -67,7 +67,6 @@ export default class Line extends Shape {
         this.end = end
         this.points = []
         this.plotLineBresenham()
-        this.render()
 
     }
     removeHTML() {

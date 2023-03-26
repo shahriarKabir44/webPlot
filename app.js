@@ -1,4 +1,4 @@
-import { select, DRAG, INSERTION, ROTATE } from "./utils/index.js";
+import { select, DRAG, INSERTION, ROTATE, attachEventListeners } from "./utils/index.js";
 import Line from "./shapes/Line.js";
 import Circle from './shapes/Circle.js'
 import Ellipse from './shapes/Ellipse.js';
@@ -24,27 +24,7 @@ select('confirmSelection').onclick = () => {
     Shape.lastShape = newShape;
     select('container').innerHTML += newShape.renderHTML()
     setTimeout(() => {
-        document.querySelectorAll('.plotterbtn').forEach(e => {
-            e.addEventListener('click', el => {
-                const shapeId = el.target.id.split('-')[1]
-                //console.log()
-                Shape.handlePlot(shapeId)
-            })
-        })
-        document.querySelectorAll('.dragBtn').forEach(e => {
-            e.addEventListener('click', el => {
-                const shapeId = el.target.id.split('-')[1]
-
-                Shape.selectShapeForDrag(shapeId)
-            })
-        })
-        document.querySelectorAll('.rotateBtn').forEach(e => {
-            e.addEventListener('click', el => {
-                const shapeId = el.target.id.split('-')[1]
-
-                Shape.selectShapeForRotation(shapeId)
-            })
-        })
+        attachEventListeners()
     }, 200);
 }
 

@@ -16,7 +16,6 @@ export default class Circle extends Shape {
 
     }
     putPixelUtil(x, y) {
-        Shape.setGridVal(this.center[0] + x, this.center[1] + y, 1 << this.id)
         this.points.push([this.center[0] + x, this.center[1] + y])
 
     }
@@ -38,7 +37,7 @@ export default class Circle extends Shape {
 
         this.drawCircleBresenham()
 
-        this.render()
+
     }
     removeHTML() {
         select('container').removeChild(select(`curcleInputs${this.id}`))
