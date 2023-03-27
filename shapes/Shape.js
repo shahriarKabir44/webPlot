@@ -176,16 +176,17 @@ export default class Shape {
                 
                 <button class="dragBtn" id="shape-${this.id}">drag</button>
                 <button class="rotateBtn" id="shape-${this.id}">rotate</button>
+ 
                 <div class="flex">
                     <div class="scaleContainer">
                         <p>sx=</p>
                         <button class="scalebtnxup" id="shape-${this.id}">+</button>
                         <p id="sx-${this.id}">1</p>
-                        <button class="scalebtnyup" id="shape-${this.id}">-</button>
+                        <button class="scalebtnxdn" id="shape-${this.id}">-</button>
                     </div>
                     <div class="scaleContainer">
                         <p>sy=</p>
-                        <button class="scalebtnxdn" id="shape-${this.id}">+</button>
+                        <button class="scalebtnyup" id="shape-${this.id}">+</button>
                         <p id="sy-${this.id}">1</p>
                         <button class="scalebtnydn" id="shape-${this.id}">-</button>
                     </div>

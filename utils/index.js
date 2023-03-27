@@ -71,15 +71,16 @@ export function attachEventListeners() {
     document.querySelectorAll('.scalebtnyup').forEach(e => {
         e.addEventListener('click', el => {
             const shapeId = el.target.id.split('-')[1]
-            select(`sy-${shapeId}`).innerHTML = select(`sx-${shapeId}`).innerHTML * 1 + 1
+            select(`sy-${shapeId}`).innerHTML = select(`sy-${shapeId}`).innerHTML * 1 + 1
             Shape.scale(shapeId)
         })
     })
     document.querySelectorAll('.scalebtnydn').forEach(e => {
         e.addEventListener('click', el => {
             const shapeId = el.target.id.split('-')[1]
-            select(`sy-${shapeId}`).innerHTML = Math.max(select(`sx-${shapeId}`).innerHTML * 1 - 1, 1)
+            select(`sy-${shapeId}`).innerHTML = Math.max(select(`sy-${shapeId}`).innerHTML * 1 - 1, 1)
             Shape.scale(shapeId)
         })
     })
+
 }

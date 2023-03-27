@@ -55,6 +55,7 @@ select('myCanvas').onmouseup = e => {
     Shape.operationMode = INSERTION
     if (Shape.lastShape) {
         Shape.lastShape.deactive()
+        Shape.lastShape = null
     }
 }
 
